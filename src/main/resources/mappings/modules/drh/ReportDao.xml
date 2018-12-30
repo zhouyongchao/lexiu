@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.ReportDao">
+
+    <sql id="reportColumns">
+        a.id AS "id",
+        a.userId AS "userId",
+        a.reportId AS "reportId",
+        a.content AS "content",
+        a.create_date AS "createDate"
+
+    </sql>
+
+
+    <select id="get" resultType="Report">
+        SELECT
+        <include refid="reportColumns"/>
+        FROM t_report a
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Report">
+        SELECT
+        <include refid="reportColumns"/>
+        FROM t_report a
+        <where>
+
+            <if test="id != null and id != ''">
+                AND a.id = #{id}
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Report">
+        SELECT
+        <include refid="reportColumns"/>
+        FROM t_report a
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_report(
+        id,
+        userId,
+        reportId,
+        content,
+        create_date
+        ) VALUES (
+        #{id},
+        #{userId},
+        #{reportId},
+        #{content},
+        #{createDate}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE t_report SET
+        userId = #{userId},
+        reportId = #{reportId},
+        content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        DELETE FROM t_report
+        WHERE id = #{id}
+    </update>
+
+</mapper>

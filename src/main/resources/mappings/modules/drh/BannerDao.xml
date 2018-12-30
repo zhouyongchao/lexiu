@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.BannerDao">
+
+    <sql id="bannerColumns">
+        a.id AS "id",
+        a.orderno AS "orderNo",
+        a.skipurl AS "skipUrl",
+        a.imageurl AS "imageUrl",
+        a.status AS "status"
+
+    </sql>
+
+
+    <select id="get" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM t_banner a
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM t_banner a
+        <where>
+
+            <if test="id != null and id != ''">
+                AND a.id = #{id}
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Banner">
+        SELECT
+        <include refid="bannerColumns"/>
+        FROM t_banner a
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO t_banner(
+        id,
+        orderno,
+        skipurl,
+        imageurl,
+        status
+        ) VALUES (
+        #{id},
+        #{orderNo},
+        #{skipUrl},
+        #{imageUrl},
+        #{status}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE t_banner SET
+        orderno = #{orderNo},
+        skipurl = #{skipUrl},
+        imageurl = #{imageUrl},
+        status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        DELETE FROM t_banner
+        WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TSecuritiesDao">
+    
+	<sql id="tSecuritiesColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.discount AS "discount",
+		a.mechanismid AS "mechanismid",
+		a.endtime AS "endtime",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="tSecuritiesJoins">
+	</sql>
+    
+	<select id="get" resultType="TSecurities">
+		SELECT 
+			<include refid="tSecuritiesColumns"/>
+		FROM t_securities a
+		<include refid="tSecuritiesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TSecurities">
+		SELECT 
+			<include refid="tSecuritiesColumns"/>
+		FROM t_securities a
+		<include refid="tSecuritiesJoins"/>
+		<where>
+			
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="discount != null and discount != ''">
+				AND a.discount = #{discount}
+			</if>
+			<if test="mechanismid != null and mechanismid != ''">
+				AND a.mechanismid = #{mechanismid}
+			</if>
+			<if test="endtime != null and endtime != ''">
+				AND a.endtime = #{endtime}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TSecurities">
+		SELECT 
+			<include refid="tSecuritiesColumns"/>
+		FROM t_securities a
+		<include refid="tSecuritiesJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_securities(
+			id,
+			type,
+			discount,
+			mechanismid,
+			endtime,
+			status
+		) VALUES (
+			#{id},
+			#{type},
+			#{discount},
+			#{mechanismid},
+			#{endtime},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_securities SET 	
+			type = #{type},
+			discount = #{discount},
+			mechanismid = #{mechanismid},
+			endtime = #{endtime},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_securities
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

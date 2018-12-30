@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TMagazineDao">
+    
+	<sql id="tMagazineColumns">
+		a.id AS "id",
+		a.imageurl AS "imageurl",
+		a.title AS "title",
+		a.content AS "content",
+		a.update_date,
+		a.create_date,
+		a.type AS "type",
+		a.description AS "description"
+	</sql>
+	
+	<sql id="tMagazineJoins">
+	</sql>
+    
+	<select id="get" resultType="TMagazine">
+		SELECT 
+			<include refid="tMagazineColumns"/>
+		FROM t_magazine a
+		<include refid="tMagazineJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TMagazine">
+		SELECT 
+			<include refid="tMagazineColumns"/>
+		FROM t_magazine a
+		<include refid="tMagazineJoins"/>
+		<where>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="imageurl != null and imageurl != ''">
+				AND a.imageurl = #{imageurl}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				AND a.update_date = #{updateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TMagazine">
+		SELECT 
+			<include refid="tMagazineColumns"/>
+		FROM t_magazine a
+		<include refid="tMagazineJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_magazine(
+			id,
+			imageurl,
+			title,
+			content,
+			create_date,
+			update_date,
+			description,
+			type
+		) VALUES (
+			#{id},
+			#{imageurl},
+			#{title},
+			#{content},
+			#{createDate},
+			#{updateDate},
+			#{description},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_magazine SET 	
+			imageurl = #{imageurl},
+			title = #{title},
+			content = #{content},
+			update_date = #{updateDate},
+			description = #{description},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_magazine
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

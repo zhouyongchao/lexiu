@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TMagazineCommentDao">
+    
+	<sql id="tMagazineCommentColumns">
+		a.id AS "id",
+		a.magazineid AS "magazineid",
+		a.userid AS "userid",
+		a.content AS "content",
+		a.statute AS "statute",
+		a.commentdate AS "commentdate"
+	</sql>
+	
+	<sql id="tMagazineCommentJoins">
+	</sql>
+    
+	<select id="get" resultType="TMagazineComment">
+		SELECT 
+			<include refid="tMagazineCommentColumns"/>
+		FROM t_magazine_comment a
+		<include refid="tMagazineCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TMagazineComment">
+		SELECT 
+			<include refid="tMagazineCommentColumns"/>
+		FROM t_magazine_comment a
+		<include refid="tMagazineCommentJoins"/>
+		<where>
+			
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="statute != null and statute != ''">
+				AND a.statute = #{statute}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="commentdate != null and commentdate != ''">
+				AND a.commentdate = #{commentdate}
+			</if>
+			<if test="magazineid != null and magazineid != ''">
+				AND a.magazineid = #{magazineid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TMagazineComment">
+		SELECT 
+			<include refid="tMagazineCommentColumns"/>
+		FROM t_magazine_comment a
+		<include refid="tMagazineCommentJoins"/>
+		<where>
+			<if test="magazineid != null and magazineid != ''">
+				AND a.magazineid = #{magazineid}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_magazine_comment(
+			id,
+			magazineid,
+			content,
+			statute,
+			userid,
+			commentdate
+		) VALUES (
+			#{id},
+			#{magazineid},
+			#{content},
+			#{statute},
+			#{userid},
+			#{commentdate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_magazine_comment SET 	
+			magazineid = #{magazineid},
+			content = #{content},
+			statute = #{statute},
+			userid = #{userid},
+			commentdate = #{commentdate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_magazine_comment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TSignlnrecordDao">
+    
+	<sql id="tSignlnrecordColumns">
+		a.id AS "id",
+		a.userid AS "userid",
+		a.signdate AS "signdate"
+	</sql>
+	
+	<sql id="tSignlnrecordJoins">
+	</sql>
+    
+	<select id="get" resultType="TSignlnrecord">
+		SELECT 
+			<include refid="tSignlnrecordColumns"/>
+		FROM t_signlnrecord a
+		<include refid="tSignlnrecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TSignlnrecord">
+		SELECT 
+			<include refid="tSignlnrecordColumns"/>
+		FROM t_signlnrecord a
+		<include refid="tSignlnrecordJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="signdate != null and signdate != ''">
+				AND a.signdate = #{signdate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TSignlnrecord">
+		SELECT 
+			<include refid="tSignlnrecordColumns"/>
+		FROM t_signlnrecord a
+		<include refid="tSignlnrecordJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_signlnrecord(
+			id,
+			userid,
+			signdate
+		) VALUES (
+			#{id},
+			#{userid},
+			#{signdate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_signlnrecord SET 	
+			userid = #{userid},
+			signdate = #{signdate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_signlnrecord
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findUserRecord" resultType="TSignlnrecord">
+		SELECT
+		<include refid="tSignlnrecordColumns"/>
+		FROM t_signlnrecord a
+		<include refid="tSignlnrecordJoins"/>
+		<where>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="beginDate != null and beginDate != '' and endDate !=null and endDate !=''">
+				AND a.signdate BETWEEN #{beginDate} AND  #{endDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>

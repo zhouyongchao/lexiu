@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TMycollectDao">
+    
+	<sql id="tMycollectColumns">
+		a.id AS "id",
+		a.userid AS "userid",
+		a.peripheryids AS "peripheryids",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="tMycollectJoins">
+	</sql>
+    
+	<select id="get" resultType="TMycollect">
+		SELECT 
+			<include refid="tMycollectColumns"/>
+		FROM t_mycollect a
+		<include refid="tMycollectJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TMycollect">
+		SELECT 
+			<include refid="tMycollectColumns"/>
+		FROM t_mycollect a
+		<include refid="tMycollectJoins"/>
+		<where>
+			
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="peripheryids != null and peripheryids != ''">
+				AND a.peripheryids = #{peripheryids}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TMycollect">
+		SELECT 
+			<include refid="tMycollectColumns"/>
+		FROM t_mycollect a
+		<include refid="tMycollectJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_mycollect(
+			id,
+			userid,
+			peripheryids,
+			status
+		) VALUES (
+			#{id},
+			#{userid},
+			#{peripheryids},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_mycollect SET 	
+			userid = #{userid},
+			peripheryids = #{peripheryids},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_mycollect
+		<where>
+
+			<if test="userid != null and userid != ''">
+				AND userid = #{userid}
+			</if>
+			<if test="peripheryids != null and peripheryids != ''">
+				AND peripheryids = #{peripheryids}
+			</if>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+		</where>	</update>
+	
+</mapper>

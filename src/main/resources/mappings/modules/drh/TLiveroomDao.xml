@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TLiveroomDao">
+    
+	<sql id="tLiveroomColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.type AS "type",
+		a.isprivate AS "isprivate",
+		a.roomkey AS "roomkey",
+		a.status AS "status",
+		a.baseurl AS "baseurl",
+		a.userid AS "userid",
+		a.username AS "username",
+		a.praiseCount AS "praiseCount",
+		a.chatId AS "chatId",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="tLiveroomJoins">
+	</sql>
+    
+	<select id="get" resultType="TLiveroom">
+		SELECT 
+			<include refid="tLiveroomColumns"/>
+		FROM t_liveroom a
+		<include refid="tLiveroomJoins"/>
+		WHERE a.id = #{id}
+		<!--<where>-->
+
+			<!--<if test="id != null and id != ''">-->
+				<!--AND a.id = #{id}-->
+			<!--</if>-->
+			<!--<if test="status != null and status != ''">-->
+				<!--AND a.status = #{status}-->
+			<!--</if>-->
+			<!--<if test="userid != null and userid != ''">-->
+				<!--AND a.userid = #{userid}-->
+			<!--</if>-->
+
+		<!--</where>-->
+	</select>
+	
+	<select id="findList" resultType="TLiveroom">
+		SELECT 
+			<include refid="tLiveroomColumns"/>
+		FROM t_liveroom a
+		<include refid="tLiveroomJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="isprivate != null and isprivate != ''">
+				AND a.isprivate = #{isprivate}
+			</if>
+			<if test="roomkey != null and roomkey != ''">
+				AND a.roomkey = #{roomkey}
+			</if>
+
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="username != null and username != ''">
+				AND a.username = #{username}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TLiveroom">
+		SELECT 
+			<include refid="tLiveroomColumns"/>
+		FROM t_liveroom a
+		<include refid="tLiveroomJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_liveroom(
+			id,
+			title,
+			type,
+			isprivate,
+			roomkey,
+			baseurl,
+			userid,
+			status,
+			username,
+			praiseCount,
+			chatId,
+			create_date
+		) VALUES (
+			#{id},
+			#{title},
+			#{type},
+			#{isprivate},
+			#{roomkey},
+			#{baseurl},
+			#{userid},
+			#{status},
+			#{username},
+			#{praiseCount},
+			#{chatId},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_liveroom SET 	
+			title = #{title},
+			type = #{type},
+			isprivate = #{isprivate},
+			roomkey = #{roomkey},
+			baseurl = #{baseurl},
+			userid = #{userid},
+			status = #{status},
+			username = #{username},
+			praiseCount = #{praiseCount},
+			chatId = #{chatId},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_liveroom
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

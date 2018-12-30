@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TCouponOrgDao">
+    
+	<sql id="tCouponOrgColumns">
+		a.id AS "id",
+		a.couponid AS "couponid",
+		a.orgid AS "orgid",
+		a.startdate AS "startdate",
+		a.enddate AS "enddate"
+	</sql>
+	
+	<sql id="tCouponOrgJoins">
+	</sql>
+    
+	<select id="get" resultType="TCouponOrg">
+		SELECT 
+			<include refid="tCouponOrgColumns"/>
+		FROM t_coupon_org a
+		<include refid="tCouponOrgJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TCouponOrg">
+		SELECT 
+			<include refid="tCouponOrgColumns"/>
+		FROM t_coupon_org a
+		<include refid="tCouponOrgJoins"/>
+		<where>
+			
+			<if test="couponid != null and couponid != ''">
+				AND a.couponid = #{couponid}
+			</if>
+			<if test="orgid != null and orgid != ''">
+				AND a.orgid = #{orgid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TCouponOrg">
+		SELECT 
+			<include refid="tCouponOrgColumns"/>
+		FROM t_coupon_org a
+		<include refid="tCouponOrgJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_coupon_org(
+			id,
+			couponid,
+			orgid,
+			startdate,
+			enddate
+		) VALUES (
+			#{id},
+			#{couponid},
+			#{orgid},
+			#{startdate},
+			#{enddate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_coupon_org SET
+			couponid = #{couponid},
+			orgid = #{orgid},
+			startdate = #{startdate},
+			enddate = #{enddate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_coupon_org
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

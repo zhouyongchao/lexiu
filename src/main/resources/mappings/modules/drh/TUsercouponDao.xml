@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TUserCouponDao">
+    
+	<sql id="tUsercouponColumns">
+		a.id AS "id",
+		a.userid AS "userid",
+		a.couponid AS "couponid",
+		a.couponorgid AS "couponorgid",
+		a.name AS "name",
+		a.facevalue AS "facevalue",
+		a.orgid AS "orgid",
+		a.orgname AS "orgname",
+		a.startdate AS "startdate",
+		a.enddate AS "enddate",
+		a.type AS "type",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="tUsercouponJoins">
+	</sql>
+    
+	<select id="get" resultType="TUsercoupon">
+		SELECT 
+			<include refid="tUsercouponColumns"/>
+		FROM t_usercoupon a
+		<include refid="tUsercouponJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TUsercoupon">
+		SELECT 
+			<include refid="tUsercouponColumns"/>
+		FROM t_usercoupon a
+		<include refid="tUsercouponJoins"/>
+		<where>
+			
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="couponid != null and couponid != ''">
+				AND a.couponid = #{couponid}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="orgid != null and orgid != ''">
+				AND a.orgid = #{orgid}
+			</if>
+			<if test="orgname != null and orgname != ''">
+				AND a.orgname = #{orgname}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="couponorgid != null and couponorgid != ''">
+				AND a.couponorgid = #{couponorgid}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TUsercoupon">
+		SELECT 
+			<include refid="tUsercouponColumns"/>
+		FROM t_usercoupon a
+		<include refid="tUsercouponJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_usercoupon(
+			id,
+			userid,
+			couponid,
+			couponorgid,
+			name,
+		    facevalue,
+		    orgid,
+		    orgname,
+		    startdate,
+		    enddate,
+		    type,
+		    status
+		) VALUES (
+			#{id},
+			#{userid},
+			#{couponid},
+			#{couponorgid},
+			#{name},
+		    #{facevalue},
+		    #{orgid},
+		    #{orgname},
+		    #{startdate},
+		    #{enddate},
+		    #{type},
+		    #{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_usercoupon SET 	
+			userid = #{userid},
+			couponid = #{couponid},
+			couponorgid = #{couponorgid},
+			name = #{name},
+			facevalue = #{facevalue},
+			orgid = #{orgid},
+			orgname = #{orgname},
+			startdate = #{startdate},
+			enddate = #{enddate},
+			type = #{type},
+			status = #{status},
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_usercoupon
+		WHERE id = #{id}
+	</update>
+
+
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TOrgCommentDao">
+    
+	<sql id="tOrgCommentColumns">
+		a.id AS "id",
+		a.orgid AS "orgid",
+		a.userid AS "userid",
+		a.content AS "content",
+		a.imageurl AS "imageurl",
+		a.statute AS "statute",
+		a.grade AS "grade",
+		a.commentdate AS "commentdate"
+
+	</sql>
+	
+	<sql id="tOrgCommentJoins">
+	</sql>
+    
+	<select id="get" resultType="TOrgComment">
+		SELECT 
+			<include refid="tOrgCommentColumns"/>
+		FROM t_org_comment a
+		<include refid="tOrgCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TOrgComment">
+		SELECT 
+			<include refid="tOrgCommentColumns"/>
+		FROM t_org_comment a
+		<include refid="tOrgCommentJoins"/>
+		<where>
+			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="orgid != null and orgid != ''">
+				AND a.orgid = #{orgid}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="imageurl != null and imageurl != ''">
+				AND a.imageurl = #{imageurl}
+			</if>
+			<if test="statute != null and statute != ''">
+				AND a.statute = #{statute}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TOrgComment">
+		SELECT 
+			<include refid="tOrgCommentColumns"/>
+		FROM t_org_comment a
+		<include refid="tOrgCommentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_org_comment(
+			id,
+			orgid,
+			userid,
+			content,
+			imageurl,
+			statute,
+			grade,
+			commentdate
+		) VALUES (
+			#{id},
+			#{orgid},
+			#{userid},
+			#{content},
+			#{imageurl},
+			#{statute},
+			#{grade},
+			#{commentdate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_org_comment SET 	
+			orgid = #{orgid},
+			userid = #{userid},
+			content = #{content},
+			imageurl = #{imageurl},
+			statute = #{statute},
+			grade = #{grade},
+			commentdate = #{commentdate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_org_comment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

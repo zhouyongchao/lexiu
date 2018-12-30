@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TNewsDao">
+    
+	<sql id="tNewsColumns">
+		a.id AS "id",
+		a.userid AS "userid",
+		a.range AS "range",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="tNewsJoins">
+	</sql>
+    
+	<select id="get" resultType="TNews">
+		SELECT 
+			<include refid="tNewsColumns"/>
+		FROM t_news a
+		<include refid="tNewsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TNews">
+		SELECT 
+			<include refid="tNewsColumns"/>
+		FROM t_news a
+		<include refid="tNewsJoins"/>
+		<where>
+			
+			<if test="userid != null and userid != ''">
+				AND a.userid = #{userid}
+			</if>
+			<if test="range != null and range != ''">
+				AND a.range = #{range}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TNews">
+		SELECT 
+			<include refid="tNewsColumns"/>
+		FROM t_news a
+		<include refid="tNewsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_news(
+			id,
+			userid,
+			range,
+			type
+		) VALUES (
+			#{id},
+			#{userid},
+			#{range},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_news SET 	
+			userid = #{userid},
+			range = #{range},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_news
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.drh.dao.TMyattentionorfansDao">
+    
+	<sql id="tMyattentionorfansColumns">
+		a.id AS "id",
+		a.attentionid AS "attentionid",
+		a.fansid AS "fansid",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="tMyattentionorfansJoins">
+	</sql>
+    
+	<select id="get" resultType="TMyattentionorfans">
+		SELECT 
+			<include refid="tMyattentionorfansColumns"/>
+		FROM t_myattentionorfans a
+		<include refid="tMyattentionorfansJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TMyattentionorfans">
+		SELECT 
+			<include refid="tMyattentionorfansColumns"/>
+		FROM t_myattentionorfans a
+		<include refid="tMyattentionorfansJoins"/>
+		<where>
+			
+			<if test="attentionid != null and attentionid != ''">
+				AND a.attentionid = #{attentionid}
+			</if>
+			<if test="fansid != null and fansid != ''">
+				AND a.fansid = #{fansid}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<!-- 根据用户粉丝个数 -->
+	<select id="getFansCount" resultType="String">
+		SELECT 
+			count(*)
+		FROM t_myattentionorfans a
+		WHERE a.attentionid = #{attentionid}
+	</select>
+	<!-- 根据用户关注者个数 -->
+	<select id="getAttentionCount" resultType="String">
+		SELECT 
+			count(*)
+		FROM t_myattentionorfans a
+		WHERE a.fansid = #{fansid}
+	</select>
+	<select id="findAllList" resultType="TMyattentionorfans">
+		SELECT 
+			<include refid="tMyattentionorfansColumns"/>
+		FROM t_myattentionorfans a
+		<include refid="tMyattentionorfansJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_myattentionorfans(
+			id,
+			attentionid,
+			fansid,
+			status
+		) VALUES (
+			#{id},
+			#{attentionid},
+			#{fansid},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_myattentionorfans SET 	
+			attentionid = #{attentionid},
+			fansid = #{fansid},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_myattentionorfans
+		<where>
+
+			<if test="attentionid != null and attentionid != ''">
+				AND attentionid = #{attentionid}
+			</if>
+			<if test="fansid != null and fansid != ''">
+				AND fansid = #{fansid}
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+		</where>
+	</update>
+	
+</mapper>
